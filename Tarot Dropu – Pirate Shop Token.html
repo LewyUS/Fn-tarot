@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarot Dropu – Pirate Shop Token</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07061a;--ink:#100c26;--card:#151030cc;--gold:#f0cd77;--gold2:#b8862f;--vio:#8b5cf6;--pink:#d946ef;--txt:#f1edfb;--mut:#a9a2c7;--ok:#4ade80;--no:#fb7185;--line:#3a2f6b}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;color:var(--txt);font-family:Inter,sans-serif;background:var(--bg);overflow-x:hidden}
+.sky{position:fixed;inset:0;z-index:-2;background:
+ radial-gradient(ellipse at 50% -10%,#3b1f7a 0%,transparent 55%),
+ radial-gradient(ellipse at 100% 100%,#3a0f4d 0%,transparent 45%),
+ radial-gradient(ellipse at 0% 80%,#10245a 0%,transparent 45%),var(--bg)}
+.stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.6;animation:tw 3s infinite ease-in-out}
+@keyframes tw{50%{opacity:.1;transform:scale(.6)}}
+.wrap{max-width:860px;margin:0 auto;padding:18px 14px 60px}
+
+/* top bar */
+.top{display:flex;justify-content:flex-end}
+.lang{display:flex;background:#0e0a24;border:1px solid var(--line);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--mut);font-weight:600;font-size:13px;padding:6px 12px;border-radius:999px;cursor:pointer;font-family:inherit}
+.lang button.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1203}
+
+/* hero */
+.hero{text-align:center;margin:8px 0 22px}
+.hero svg{width:84px;height:84px;filter:drop-shadow(0 0 18px #f0cd7766)}
+.hero .spin{transform-origin:50px 50px;animation:rot 40s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+h1{font-family:'Cinzel Decorative',serif;font-size:clamp(28px,7vw,46px);margin:6px 0 2px;background:linear-gradient(180deg,#fff3c9,var(--gold) 45%,var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:1px}
+.tagline{color:var(--mut);font-size:14px;margin:0}
+.pill{display:inline-flex;gap:6px;align-items:center;margin-top:10px;font-size:12px;color:var(--gold);border:1px solid #f0cd7744;background:#f0cd7712;padding:5px 12px;border-radius:999px}
+
+/* form */
+form{display:flex;gap:8px;max-width:560px;margin:0 auto;background:#0e0a24cc;border:1px solid var(--line);padding:6px;border-radius:16px;box-shadow:0 10px 40px #0008}
+form input{flex:1;min-width:0;border:0;background:transparent;color:var(--txt);font-size:17px;padding:12px 12px;font-family:inherit;outline:none}
+form button{border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:15px;color:#fff;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,var(--vio),var(--pink));box-shadow:0 4px 20px #a855f766;white-space:nowrap}
+form button:active{transform:scale(.97)}
+
+/* cards */
+.spread{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:28px 0 8px}
+@media(max-width:600px){.spread{grid-template-columns:repeat(6,1fr)}.slot{grid-column:span 2}.slot:nth-child(4){grid-column:2/span 2}}
+.slot{perspective:1000px;animation:deal .5s backwards}
+@keyframes deal{from{opacity:0;transform:translateY(-30px) rotate(-8deg)}}
+.slot .pos{text-align:center;color:var(--gold);font-family:Cinzel,serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.tc{position:relative;aspect-ratio:5/8.4;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.tc.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;overflow:hidden;box-shadow:0 8px 24px #0009}
+.back{background:#1b1240}
+.back svg{width:100%;height:100%;display:block}
+.front{transform:rotateY(180deg);background:linear-gradient(170deg,#2a1d56,#140d2c 60%,#0d0820);border:1.5px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:8% 6%}
+.front::before{content:"";position:absolute;inset:5px;border:1px solid #f0cd7766;border-radius:8px;pointer-events:none}
+.front .num{font-family:Cinzel,serif;color:var(--gold);font-size:clamp(10px,2.2vw,13px);letter-spacing:1px}
+.medal{width:72%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-size:clamp(26px,6.5vw,44px);background:radial-gradient(circle at 50% 40%,#f0cd7733,#f0cd770a 60%,transparent 70%);border:1px solid #f0cd7755;box-shadow:inset 0 0 20px #f0cd7722, 0 0 24px #a855f733;position:relative}
+.medal::after{content:"✦  ✦";position:absolute;bottom:-14%;color:var(--gold);font-size:9px;letter-spacing:4px;opacity:.7}
+.front .nm{font-family:Cinzel,serif;font-weight:700;font-size:clamp(9.5px,2.2vw,12.5px);text-align:center;line-height:1.15;color:#fff3c9}
+.front .rv{font-size:9px;color:var(--no);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.front.reversed .medal{transform:rotate(180deg)}
+.front .mn{font-size:clamp(8.5px,1.9vw,10.5px);color:var(--mut);text-align:center;line-height:1.25;margin-top:3px}
+.tc.flip .front{animation:glow 1.2s .6s}
+@keyframes glow{40%{box-shadow:0 0 30px #f0cd77aa}}
+
+/* results */
+#res{display:none;opacity:0;transform:translateY(14px);transition:.7s}
+#res.show{opacity:1;transform:none}
+.panel{background:var(--card);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:16px;box-shadow:0 10px 40px #0006}
+.verdict{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.ring{width:118px;height:118px;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .v{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:700;font-size:24px}
+.ring .v small{display:block;font-size:10px;color:var(--mut);font-weight:500;text-transform:uppercase;letter-spacing:1px}
+.vtext{flex:1;min-width:220px}
+.vtext .kicker{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mut)}
+.vtext h2{font-family:Cinzel,serif;font-size:clamp(22px,5vw,30px);margin:4px 0 8px;line-height:1.15}
+.yes{color:var(--ok)}.nope{color:var(--no)}
+.quote{font-style:italic;color:#d9d2f3;font-size:14.5px;line-height:1.5;border-left:3px solid var(--gold);padding-left:12px;margin:0}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.tile{background:#0e0a24;border:1px solid #2b2350;border-radius:14px;padding:14px;display:flex;gap:12px}
+.tile .ic{width:42px;height:42px;flex:none;border-radius:12px;display:grid;place-items:center;font-size:22px;background:linear-gradient(135deg,#2c1f5c,#1a1238);border:1px solid #3d3175}
+.tile .lb{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:600}
+.tile .cardref{color:var(--mut);font-weight:500;letter-spacing:.5px;text-transform:none}
+.tile .val{font-size:15px;font-weight:600;margin:3px 0 2px;line-height:1.35}
+.tile .sm{font-size:12.5px;color:var(--mut);line-height:1.4}
+.tile.wide{grid-column:1/-1}
+.chg{margin:6px 0 0;padding:0;list-style:none}
+.chg li{font-size:13.5px;padding:6px 0 6px 26px;position:relative;line-height:1.4;border-top:1px dashed #2b2350}
+.chg li:first-child{border-top:0}
+.chg li::before{content:"⚓";position:absolute;left:2px;top:6px;font-size:13px}
+.badge{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:#f0cd771c;color:var(--gold);border:1px solid #f0cd7740;margin-left:4px;vertical-align:1px}
+
+.sec-title{display:flex;align-items:center;gap:10px;font-family:Cinzel,serif;color:var(--gold);font-size:17px;margin:0 0 12px}
+.sec-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#f0cd7755,transparent)}
+.real-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.real-top .big{font-size:clamp(34px,9vw,48px);font-weight:700;background:linear-gradient(180deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.real-top .msg{font-weight:600;font-size:14.5px;flex:1;min-width:200px}
+.meter{height:12px;border-radius:999px;background:#1d1640;margin:12px 0 4px;overflow:hidden;border:1px solid #2b2350}
+.meter i{display:block;height:100%;min-width:3px;background:linear-gradient(90deg,var(--no),var(--gold))}
+.meter-l{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}}
+.st{background:#0e0a24;border:1px solid #2b2350;border-radius:12px;padding:12px;text-align:center}
+.st b{display:block;font-size:19px;color:#fff3c9}
+.st span{font-size:11.5px;color:var(--mut);line-height:1.3;display:block;margin-top:3px}
+.note{font-size:12px;color:var(--mut);margin-top:12px;line-height:1.5}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:600px){.facts{grid-template-columns:1fr 1fr}}
+.fact{background:#0e0a24;border:1px solid #2b2350;border-radius:12px;padding:12px}
+.fact .e{font-size:20px}
+.fact b{display:block;font-size:13px;margin:4px 0 2px;color:#fff3c9}
+.fact span{font-size:12px;color:var(--mut);line-height:1.4}
+.again{display:block;margin:18px auto 0;background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 18px;border-radius:999px;font-weight:600;cursor:pointer;font-family:inherit}
+.foot{text-align:center;color:#6b6491;font-size:11.5px;margin-top:26px}
+</style>
+</head>
+<body>
+<div class="sky"></div><div class="stars" id="stars"></div>
+<div class="wrap">
+  <div class="top"><div class="lang"><button data-l="pl">🇵🇱 PL</button><button data-l="en">🇬🇧 EN</button></div></div>
+
+  <div class="hero">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c9"/><stop offset="1" stop-color="#b8862f"/></linearGradient></defs>
+      <g class="spin" fill="none" stroke="url(#g)">
+        <circle cx="50" cy="50" r="46" stroke-width="1.2" stroke-dasharray="2 4"/>
+        <circle cx="50" cy="50" r="38" stroke-width="1"/>
+        <g stroke-width="1.4"><path d="M50 6v12M50 82v12M6 50h12M82 50h12"/></g>
+      </g>
+      <path d="M50 16 L56 44 L84 50 L56 56 L50 84 L44 56 L16 50 L44 44 Z" fill="url(#g)"/>
+      <circle cx="50" cy="50" r="6" fill="#1a1238" stroke="url(#g)" stroke-width="1.5"/>
+    </svg>
+    <h1 data-t="title"></h1>
+    <p class="tagline" data-t="tagline"></p>
+    <div class="pill" id="pill"></div>
+  </div>
+
+  <form id="f">
+    <input type="text" id="who" maxlength="40" autocomplete="off" required>
+    <button type="submit" data-t="draw"></button>
+  </form>
+
+  <div class="spread" id="spread"></div>
+  <div id="res"></div>
+  <p class="foot" data-t="foot"></p>
+</div>
+
+<script>
+/* ===== DANE ===== */
+const SEASON_END = new Date("2026-12-05T21:00:00+01:00");
+const P_BASE = 1/137500, P_LOW = 1/700000, GPD = 4, CPG = 15;
+
+// [PL, EN, standard, zakopane, rzadkie]
+const POIS = [
+ ["Gumowy Kurort","Rubber Resort",47,2,6],["Latarniowa Przystań","Lantern Landing",45,0,4],["Miasto Logue","Loguetown",41,0,4],
+ ["Park Arlonga","Arlong Park",35,2,0],["Port Grabieży","Plunder Port",34,2,0],["Twierdza Lil Uziego","Lil Uzi's Stronghold",33,0,0],
+ ["Wioska Wiatraków","Windmill Village",29,1,1],["Ruchliwa Zatoka","Busy Bay",29,1,4],["Przeklęta Jaskinia","Cursed Cavern",28,4,0],
+ ["Laguna Łupów","Loot Lagoon",26,1,4],["Skrzynia","The Chest",10,34,0],["Statek S.S. Rocky","The S.S. Rocky",8,2,4]
+];
+const tot=p=>p[2]+p[3]+p[4];
+const BEST=[...POIS].sort((a,b)=>tot(b)-tot(a));
+
+// [PL, EN, ikona, znaczenie PL, znaczenie EN, moc]
+const DECK = [
+ ["Głupiec","The Fool","🃏","Skok bez planu","A leap with no plan",6],
+ ["Mag","The Magician","🪄","Masz wszystko, czego trzeba","You have all you need",14],
+ ["Kapłanka","High Priestess","🌙","Szukaj w ukryciu","Search the hidden spots",7],
+ ["Cesarzowa","The Empress","🌸","Obfity loot","Abundant loot",12],
+ ["Cesarz","The Emperor","👑","Przejmij POI","Own the POI",10],
+ ["Kapłan","Hierophant","📜","Trzymaj się rutyny","Stick to routine",3],
+ ["Kochankowie","The Lovers","💞","Graj w duo","Play duos",7],
+ ["Rydwan","The Chariot","🏎️","Rotuj szybko","Rotate fast",11],
+ ["Moc","Strength","🦁","Wygraj walkę o skrzynię","Win the chest fight",9],
+ ["Pustelnik","The Hermit","🏮","Ląduj samotnie","Land alone",5],
+ ["Koło Fortuny","Wheel of Fortune","🎡","Czysty fart","Pure luck",18],
+ ["Sprawiedliwość","Justice","⚖️","Dostaniesz, na co zasłużysz","You get what you earn",3],
+ ["Wisielec","The Hanged Man","🙃","Zmień strategię","Change your strategy",-6],
+ ["Śmierć","Death","💀","Koniec starego stylu","End of the old playstyle",-10],
+ ["Umiarkowanie","Temperance","🍶","Cierpliwość","Patience",2],
+ ["Diabeł","The Devil","😈","Za dużo tryhardu","Too much tryharding",-8],
+ ["Wieża","The Tower","🗼","Hot drop i chaos","Hot drop chaos",-12],
+ ["Gwiazda","The Star","⭐","Dobry znak","A good omen",14],
+ ["Księżyc","The Moon","🌕","Złudzenia","Illusions",-5],
+ ["Słońce","The Sun","☀️","Pełny sukces","Total success",20],
+ ["Sąd Ostateczny","Judgement","📯","Druga szansa","A second chance",6],
+ ["Świat","The World","🌍","Wielki finał","The grand finale",16]
+];
+
+const SOURCES = [
+ {k:"std",e:"📦",w:5},{k:"rare",e:"💎",w:2},{k:"buried",e:"🪏",w:2},
+ {k:"vault",e:"🔐",w:2},{k:"sprite",e:"🧚",w:2},{k:"broken",e:"💥",w:1}
+];
+
+/* ===== TEKSTY ===== */
+const T = {
+ pl:{
+  title:"Tarot Dropu", tagline:"Pirate Shop Token · Treasure Hunters",
+  pill:d=>`🏴‍☠️ Do końca sezonu: ${d} ${d===1?'dzień':'dni'}`,
+  ph:"Wpisz nick gracza…", draw:"Losuj karty ✨",
+  foot:"Karty to zabawa. Liczby w „Realnej szansie” są prawdziwe. Dane: Epic Games i społeczność, listopad 2026.",
+  pos:["Gracz","Fart","Kiedy","Skrzynka","Miejscówka"],
+  rev:"odwrócona",
+  kicker:"Werdykt kart", yes:n=>`${n} dropnie token!`, no:n=>`${n} jeszcze nie dropnie`,
+  cosmic:"kosmiczna",
+  when:"Kiedy", srcL:"Z jakiej skrzynki", where:"Miejscówka", changesL:"Czy potrzebne zmiany?",
+  noChange:"Nie. Graj dokładnie tak jak teraz — karty są po Twojej stronie.",
+  yesChange:n=>`Tak, ${n} ${n===1?'zmiana':'zmiany'}:`,
+  notSoon:"Nie w najbliższych grach. Najwcześniej:",
+  ifChange:" — jeśli wprowadzisz zmiany",
+  ended:"Sezon się skończył 🏴‍☠️",
+  th:"Treasure Hours",
+  chests:n=>`${n} skrzynek`, inGame:"w grze:", bestHere:"najlepsza miejscówka na mapie 👌", bestIs:(n,c)=>`najwięcej skrzynek ma ${n} (${c})`,
+  rank:(i,n)=>`#${i} z ${n} pod względem liczby skrzynek`,
+  realTitle:"Realna szansa", realSub:"do końca sezonu, dla przeciętnego gracza (~4 gry dziennie, ~15 skrzynek na grę)",
+  st1:"skrzynek do końca sezonu", st2:n=>`na 100 graczy takich jak ${n} dropnie`, st3:"dni grania na 50% szansy", st4:"skrzynek na 1 token (średnio)",
+  pess:"Przy gorszej stawce 1 na 700 000:", indep:"Każda skrzynka to osobny rzut. 1000 pustych nie zwiększa szansy w następnej — nie ma pity.",
+  factsTitle:"Co warto wiedzieć",
+  facts:[
+   ["🎯","Każda skrzynka się liczy","Zwykła, rzadka, zakopana, Sprite'a i w sejfie — wszystkie mają tę samą szansę"],
+   ["💥","Rozbicie = otwarcie","Zniszczona skrzynka też losuje token"],
+   ["🔐","Sejf to skarb","Dużo skrzynek w jednym miejscu, zwykle min. 4 rzadkie. Potrzebny Vault Key"],
+   ["⏰","Treasure Hours","Soboty, oczekiwane 20:00–22:00 i 3:00–5:00 (PL). Szansa na token tam niepotwierdzona"],
+   ["🧚","Fortune Sprite","Pokazuje skrzynki w pobliżu — mniej szukania, więcej rzutów"],
+   ["🎟️","1 drop = 2 tokeny","Jeden na 2026 (aktywuj do 15 grudnia) i jeden na 2027, każdy na 14 dni darmowego sklepu"]
+  ],
+  again:"Losuj ponownie dla kogoś innego ↺",
+  real:[
+   "Brutalnie szczerze: to praktycznie zero. Graj, bo lubisz, a nie dla tokena.",
+   "Mniej niż 1 na 100. Nie nastawiaj się — ale ktoś musi go w końcu trafić.",
+   "Kilka procent. Mało, ale już nie „nigdy”. Szacun za grind.",
+   "Jak na ten token to bardzo dużo. Ty w ogóle śpisz?"
+  ],
+  roastYes:[
+   "Karty Cię kochają. Matematyka trochę mniej, ale nie mówmy jej tego.",
+   "Piękna wróżba. Szkoda tylko, że skrzynki nie czytają tarota.",
+   "Wierzę w Ciebie. Liczby nie bardzo, ale ja tak 💛",
+   "Fart po Twojej stronie — teraz tylko otwórz jakieś sto tysięcy skrzynek."
+  ],
+  roastNo:[
+   "Przykro mi, ale nawet karty się trochę z Ciebie śmieją. Z miłością.",
+   "Nie tym razem. Ale hej — V-Bucksy nadal działają.",
+   "Karty mówią „nie”, matematyka mówi „zdecydowanie nie”. Ja mówię: graj dla zabawy.",
+   "Szczerze? Prędzej wygrasz Victory Royale z zamkniętymi oczami. Ale trzymam kciuki 🤞"
+  ],
+  src:{
+   std:["Zwykła skrzynka skarbów","Najczęstsza na mapie — i ma tę samą szansę co każda inna"],
+   rare:["Rzadka skrzynka","Lepszy loot, ale szansa na token taka sama"],
+   buried:["Zakopana skrzynka","Najwięcej jest w Skrzyni (34 zakopane)"],
+   vault:["Skrzynka z sejfu","Wymaga Vault Key — w sejfie jest dużo skrzynek naraz"],
+   sprite:["Skrzynka Sprite'a","W poniedziałki (Mastery Monday) jest ich więcej"],
+   broken:["Rozbita skrzynka","Rozbicie liczy się jak otwarcie — czasem szybciej"]
+  },
+  changes:[
+   "Ląduj tam, gdzie najwięcej skrzynek: Gumowy Kurort, Latarniowa Przystań, Miasto Logue",
+   "Jak wypadnie Vault Key — od razu leć do sejfu",
+   "Na zakopane skrzynki leć do Skrzyni (34 sztuki)",
+   "Graj w sobotnie Treasure Hours (20:00–22:00 albo 3:00–5:00)",
+   "Bierz Fortune Sprite'a — pokazuje skrzynki w pobliżu",
+   "Rozbijaj skrzynki, jeśli to szybsze niż otwieranie",
+   "Graj więcej gier — liczba skrzynek to jedyne, co się liczy",
+   "Mniej walk w hot dropie, więcej przeszukiwania",
+   "W poniedziałki farm skrzynki Sprite'a — jest ich więcej",
+   "Rotuj szybko między budynkami, nie czekaj na strefę"
+  ],
+  days:["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"],
+  months:["sty","lut","mar","kwi","maj","cze","lip","sie","wrz","paź","lis","gru"],
+  hours:["po południu","wieczorem (18–21)","późnym wieczorem (21–24)","w pierwszej grze dnia","w ostatniej grze dnia"],
+  satTH:"20:00–22:00", sunTH:"3:00–5:00 w nocy",
+  moments:["zaraz po lądowaniu","w pierwszej strefie","w środku meczu","w końcówce (top 10)"],
+  locale:"pl-PL"
+ },
+ en:{
+  title:"Drop Tarot", tagline:"Pirate Shop Token · Treasure Hunters",
+  pill:d=>`🏴‍☠️ Season ends in: ${d} ${d===1?'day':'days'}`,
+  ph:"Enter player's name…", draw:"Draw cards ✨",
+  foot:"The cards are just for fun. The numbers in “Real chance” are real. Data: Epic Games and community, November 2026.",
+  pos:["Player","Luck","When","Chest","Location"],
+  rev:"reversed",
+  kicker:"The cards say", yes:n=>`${n} will drop the token!`, no:n=>`${n} won't drop it yet`,
+  cosmic:"cosmic",
+  when:"When", srcL:"Which chest", where:"Location", changesL:"Changes needed?",
+  noChange:"No. Keep playing exactly like this — the cards are on your side.",
+  yesChange:n=>`Yes, ${n} ${n===1?'change':'changes'}:`,
+  notSoon:"Not in the next few games. Earliest:",
+  ifChange:" — if you make the changes",
+  ended:"The season is over 🏴‍☠️",
+  th:"Treasure Hours",
+  chests:n=>`${n} chests`, inGame:"in game:", bestHere:"best spot on the map 👌", bestIs:(n,c)=>`most chests: ${n} (${c})`,
+  rank:(i,n)=>`#${i} of ${n} by chest count`,
+  realTitle:"Real chance", realSub:"until the season ends, for an average player (~4 games a day, ~15 chests a game)",
+  st1:"chests until season end", st2:n=>`out of 100 players like ${n} will drop it`, st3:"days of play for a 50% chance", st4:"chests per token (on average)",
+  pess:"At the worse rate of 1 in 700,000:", indep:"Every chest is its own roll. 1,000 empty ones don't raise the odds of the next — there's no pity.",
+  factsTitle:"Good to know",
+  facts:[
+   ["🎯","Every chest counts","Regular, rare, buried, Sprite and vault chests all have the same odds"],
+   ["💥","Breaking = opening","A destroyed chest rolls for the token too"],
+   ["🔐","Vaults are gold","Lots of chests in one spot, usually 4+ rare. Needs a Vault Key"],
+   ["⏰","Treasure Hours","Saturdays, expected 2–4 PM and 9–11 PM ET. Token boost unconfirmed"],
+   ["🧚","Fortune Sprite","Reveals nearby chests — less searching, more rolls"],
+   ["🎟️","1 drop = 2 tokens","One for 2026 (activate by Dec 15) and one for 2027, 14 days of free shop each"]
+  ],
+  again:"Draw again for someone else ↺",
+  real:[
+   "Brutally honest: that's basically zero. Play because you enjoy it, not for the token.",
+   "Less than 1 in 100. Don't count on it — but someone has to hit it eventually.",
+   "A few percent. Small, but not “never”. Respect the grind.",
+   "For this token that's huge. Do you even sleep?"
+  ],
+  roastYes:[
+   "The cards love you. Math loves you a bit less, but let's not tell it.",
+   "Beautiful reading. Too bad chests don't read tarot.",
+   "I believe in you. The numbers don't really, but I do 💛",
+   "Luck is on your side — now just open about a hundred thousand chests."
+  ],
+  roastNo:[
+   "Sorry, even the cards are laughing a little. Lovingly.",
+   "Not this time. But hey — V-Bucks still work.",
+   "The cards say “no”, math says “absolutely not”. I say: play for fun.",
+   "Honestly? You'd win a Victory Royale with your eyes closed first. Fingers crossed 🤞"
+  ],
+  src:{
+   std:["Regular treasure chest","Most common on the map — same odds as any other"],
+   rare:["Rare chest","Better loot, same token odds"],
+   buried:["Buried chest","The Chest has the most (34 buried)"],
+   vault:["Vault chest","Needs a Vault Key — lots of chests in one place"],
+   sprite:["Sprite chest","More of them on Mondays (Mastery Monday)"],
+   broken:["Broken chest","Breaking counts as opening — sometimes faster"]
+  },
+  changes:[
+   "Land where the most chests are: Rubber Resort, Lantern Landing, Loguetown",
+   "If a Vault Key drops — go straight to the vault",
+   "For buried chests, go to The Chest (34 of them)",
+   "Play during Saturday Treasure Hours",
+   "Grab a Fortune Sprite — it reveals nearby chests",
+   "Break chests if it's faster than opening them",
+   "Play more games — chest count is the only thing that matters",
+   "Fewer hot-drop fights, more looting",
+   "Farm Sprite chests on Mondays — there are more of them",
+   "Rotate fast between buildings, don't wait for the storm"
+  ],
+  days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+  months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+  hours:["in the afternoon","in the evening (6–9 PM)","late evening (9 PM–midnight)","in the first game of the day","in the last game of the day"],
+  satTH:"8–10 PM (CET)", sunTH:"3–5 AM (CET)",
+  moments:["right after landing","in the first zone","mid-match","in the endgame (top 10)"],
+  locale:"en-GB"
+ }
+};
+
+/* ===== NARZĘDZIA ===== */
+function hash(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return (h^=h>>>16)>>>0}}
+function rng(seed){let a=hash(seed)();return ()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pickI=(r,n)=>Math.floor(r()*n);
+function wpick(r,a,wf){const s=a.reduce((x,y)=>x+wf(y),0);let x=r()*s;for(const it of a){if((x-=wf(it))<0)return it}return a[0]}
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function roman(n){if(!n)return"0";const m=[[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];let s="";for(const[v,l]of m)while(n>=v){s+=l;n-=v}return s}
+const daysLeft=()=>Math.max(0,Math.ceil((SEASON_END-new Date())/864e5));
+
+/* gwiazdy */
+(function(){const s=document.getElementById('stars');let h="";for(let i=0;i<70;i++)h+=`<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;opacity:${.2+Math.random()*.6}"></i>`;s.innerHTML=h})();
+
+/* tył karty */
+const BACK=`<svg viewBox="0 0 100 168" preserveAspectRatio="none"><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d1d66"/><stop offset="1" stop-color="#140c33"/></linearGradient>
+<pattern id="pt" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M5 0L10 5L5 10L0 5Z" fill="none" stroke="#f0cd77" stroke-opacity=".12" stroke-width=".6"/></pattern></defs>
+<rect width="100" height="168" fill="url(#bg)"/><rect width="100" height="168" fill="url(#pt)"/>
+<rect x="5" y="5" width="90" height="158" rx="6" fill="none" stroke="#f0cd77" stroke-width="1.2"/>
+<rect x="9" y="9" width="82" height="150" rx="4" fill="none" stroke="#f0cd77" stroke-opacity=".4" stroke-width=".6"/>
+<circle cx="50" cy="84" r="24" fill="none" stroke="#f0cd77" stroke-width="1"/>
+<circle cx="50" cy="84" r="30" fill="none" stroke="#f0cd77" stroke-opacity=".35" stroke-dasharray="1.5 2.5"/>
+<path d="M50 62 C60 84 60 84 50 106 C40 84 40 84 50 62Z M28 84 C50 74 50 74 72 84 C50 94 50 94 28 84Z" fill="#f0cd77" fill-opacity=".85"/>
+<circle cx="50" cy="84" r="4" fill="#140c33" stroke="#f0cd77"/>
+<path d="M50 20l2 5 5 .5-4 3 1.5 5-4.5-3-4.5 3 1.5-5-4-3 5-.5z M50 136l2 5 5 .5-4 3 1.5 5-4.5-3-4.5 3 1.5-5-4-3 5-.5z" fill="#f0cd77" fill-opacity=".7"/>
+</svg>`;
+
+/* ===== JĘZYK ===== */
+let L="pl";
+try{const s=localStorage.getItem('tarot_lang');if(s==='en'||s==='pl')L=s;else if(!(navigator.language||'').startsWith('pl'))L='en'}catch(e){}
+let last=null;
+function applyLang(){
+  const t=T[L];document.documentElement.lang=L;
+  document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t[el.dataset.t]);
+  document.getElementById('who').placeholder=t.ph;
+  document.getElementById('pill').textContent=t.pill(daysLeft());
+  document.title=t.title+" – Pirate Shop Token";
+  document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===L));
+  if(last)render(last,false);
+}
+document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{L=b.dataset.l;try{localStorage.setItem('tarot_lang',L)}catch(e){}applyLang()});
+
+/* ===== LOSOWANIE (niezależne od języka) ===== */
+function reading(who){
+  const r=rng(who.toLowerCase()+"|"+new Date().toISOString().slice(0,10));
+  const idx=[...DECK.keys()],cards=[];
+  for(let i=0;i<5;i++){const ci=idx.splice(pickI(r,idx.length),1)[0];cards.push({i:ci,rev:r()<.3})}
+  const val=c=>c.rev?-Math.abs(DECK[c.i][5])*.6:DECK[c.i][5];
+  let cosmic=35+Math.round(r()*15);cards.forEach((c,i)=>cosmic+=val(c)*(i===1?1.6:1));
+  cosmic=Math.max(2,Math.min(98,Math.round(cosmic)));
+  // kiedy
+  const days=[];const n=new Date();const d=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  while(d<=SEASON_END){days.push(new Date(d));d.setDate(d.getDate()+1)}
+  const good=val(cards[2])>8;
+  const weekend=days.filter(x=>x.getDay()===6||x.getDay()===0);
+  const pool=(good&&weekend.length)?weekend:days;
+  const day=pool.length?pool[pickI(r,pool.length)]:null;
+  const hourI=pickI(r,5), momentI=pickI(r,4);
+  const src=wpick(r,SOURCES,x=>x.w);
+  let pp=POIS;
+  if(src.k==="buried")pp=POIS.filter(p=>p[3]>0);
+  if(src.k==="rare")pp=POIS.filter(p=>p[4]>0);
+  const poi=wpick(r,pp,p=>src.k==="buried"?p[3]:src.k==="rare"?p[4]:tot(p));
+  const nCh=cosmic>=80?0:cosmic>=60?1:cosmic>=40?2:3;
+  const ci=[...Array(10).keys()],chs=[];for(let i=0;i<nCh;i++)chs.push(ci.splice(pickI(r,ci.length),1)[0]);
+  const roastI=pickI(r,4);
+  return {who,cards,cosmic,drops:cosmic>=55,day,good,hourI,momentI,src,poi,chs,roastI};
+}
+
+/* ===== RENDER ===== */
+function render(R,animate){
+  const t=T[L], W=esc(R.who), nm=c=>DECK[c.i][L==='pl'?0:1], mn=c=>DECK[c.i][L==='pl'?3:4];
+  const sp=document.getElementById('spread');
+  sp.innerHTML=R.cards.map((c,i)=>`
+   <div class="slot" style="animation-delay:${animate?i*.08:0}s">
+    <div class="pos">${t.pos[i]}</div>
+    <div class="tc${animate?'':' flip'}" id="c${i}">
+      <div class="face back">${BACK}</div>
+      <div class="face front${c.rev?' reversed':''}">
+        <div class="num">${roman(c.i)}</div>
+        <div class="medal">${DECK[c.i][2]}</div>
+        <div><div class="nm">${nm(c)}</div>${c.rev?`<div class="rv" style="text-align:center">${t.rev}</div>`:''}<div class="mn">${mn(c)}</div></div>
+      </div>
+    </div></div>`).join("");
+  if(animate)R.cards.forEach((_,i)=>setTimeout(()=>document.getElementById('c'+i).classList.add('flip'),500+i*420));
+
+  // kiedy
+  let when;
+  if(!R.day)when=t.ended;
+  else{
+    const dw=R.day.getDay(), th=R.good&&(dw===6||dw===0);
+    const hr=th?(dw===6?t.satTH:t.sunTH):t.hours[R.hourI];
+    const dateS=L==='pl'?`${t.days[dw]}, ${R.day.getDate()} ${t.months[R.day.getMonth()]}`:`${t.days[dw]}, ${R.day.getDate()} ${t.months[R.day.getMonth()]}`;
+    when=`${dateS} — ${hr}${th?` <span class="badge">${t.th}</span>`:''}`;
+    when=R.drops?`${when}<div class="sm">${t.moments[R.momentI]}</div>`:`<span style="font-weight:500">${t.notSoon}</span> ${when}${R.chs.length?`<div class="sm">${t.ifChange.replace(/^ — /,'')}</div>`:''}`;
+  }
+  const [sN,sD]=t.src[R.src.k];
+  const poiName=R.poi[L==='pl'?0:1], rankI=BEST.indexOf(R.poi)+1;
+  const best=BEST[0];
+  const poiSm=(L==='pl'?`${t.inGame} ${R.poi[1]} · `:'')+(rankI===1?t.bestHere:t.bestIs(best[L==='pl'?0:1],tot(best)));
+
+  // matematyka
+  const dl=daysLeft(), chests=dl*GPD*CPG;
+  const pR=1-Math.pow(1-P_BASE,chests), pL=1-Math.pow(1-P_LOW,chests);
+  const for50=Math.ceil(Math.log(.5)/Math.log(1-P_BASE));
+  const days50=Math.round(for50/(GPD*CPG));
+  const fmt=n=>n.toLocaleString(t.locale);
+  const pct=p=>(p<.01?(p*100).toFixed(3):(p*100).toFixed(2)).replace('.',L==='pl'?',':'.')+'%';
+  const per100=(pR*100).toFixed(1).replace('.',L==='pl'?',':'.');
+  const realMsg=t.real[pR<.002?0:pR<.01?1:pR<.05?2:3];
+  const meterW=Math.min(100,pR*100*10); // skala 0–10%
+
+  const C=2*Math.PI*52, off=C*(1-R.cosmic/100), col=R.drops?'#4ade80':'#fb7185';
+  const res=document.getElementById('res');
+  res.innerHTML=`
+  <div class="panel">
+    <div class="verdict">
+      <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#231b48" stroke-width="10"/>
+        <circle cx="60" cy="60" r="52" fill="none" stroke="${col}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${animate?C:off}" id="arc" style="transition:stroke-dashoffset 1.4s ease .2s;filter:drop-shadow(0 0 6px ${col})"/></svg>
+        <div class="v"><div>${R.cosmic}%<small>${t.cosmic}</small></div></div></div>
+      <div class="vtext">
+        <div class="kicker">${t.kicker}</div>
+        <h2 class="${R.drops?'yes':'nope'}">${R.drops?'✅ '+t.yes(W):'❌ '+t.no(W)}</h2>
+        <p class="quote">„${(R.drops?t.roastYes:t.roastNo)[R.roastI]}”</p>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="tile"><div class="ic">🕒</div><div><div class="lb">${t.when} <span class="cardref">· ${nm(R.cards[2])}</span></div><div class="val">${when}</div></div></div>
+      <div class="tile"><div class="ic">${R.src.e}</div><div><div class="lb">${t.srcL} <span class="cardref">· ${nm(R.cards[3])}</span></div><div class="val">${sN}</div><div class="sm">${sD}</div></div></div>
+      <div class="tile"><div class="ic">📍</div><div><div class="lb">${t.where} <span class="cardref">· ${nm(R.cards[4])}</span></div><div class="val">${poiName} <span class="badge">${t.chests(tot(R.poi))}</span></div><div class="sm">${poiSm}<br>${t.rank(rankI,POIS.length)}</div></div></div>
+      <div class="tile"><div class="ic">🔧</div><div><div class="lb">${t.changesL}</div>${R.chs.length?`<div class="val">${t.yesChange(R.chs.length)}</div><ul class="chg">${R.chs.map(i=>`<li>${t.changes[i]}</li>`).join("")}</ul>`:`<div class="val">${t.noChange}</div>`}</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-title">📊 ${t.realTitle}</div>
+    <div class="real-top"><div class="big">${pct(pR)}</div><div class="msg">${realMsg}</div></div>
+    <div class="meter"><i style="width:${meterW}%"></i></div>
+    <div class="meter-l"><span>0%</span><span>5%</span><span>10%</span></div>
+    <div class="note" style="margin-top:6px">${t.realSub}</div>
+    <div class="stats">
+      <div class="st"><b>${fmt(chests)}</b><span>${t.st1}</span></div>
+      <div class="st"><b>~${per100}</b><span>${t.st2(W)}</span></div>
+      <div class="st"><b>${fmt(days50)}</b><span>${t.st3}</span></div>
+      <div class="st"><b>${fmt(137500)}</b><span>${t.st4}</span></div>
+    </div>
+    <div class="note">${t.pess} <b>${pct(pL)}</b><br>${t.indep}</div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-title">🗝️ ${t.factsTitle}</div>
+    <div class="facts">${t.facts.map(f=>`<div class="fact"><div class="e">${f[0]}</div><b>${f[1]}</b><span>${f[2]}</span></div>`).join("")}</div>
+  </div>
+  <button class="again" id="again">${t.again}</button>`;
+  document.getElementById('again').onclick=()=>{const w=document.getElementById('who');w.value='';w.focus();window.scrollTo({top:0,behavior:'smooth'})};
+
+  if(animate){
+    res.classList.remove('show');res.style.display='none';
+    setTimeout(()=>{res.style.display='block';requestAnimationFrame(()=>{res.classList.add('show');const a=document.getElementById('arc');requestAnimationFrame(()=>a.style.strokeDashoffset=off)});res.scrollIntoView({behavior:'smooth',block:'start'})},2800);
+  } else {res.style.display='block';res.classList.add('show')}
+}
+
+document.getElementById('f').addEventListener('submit',e=>{
+  e.preventDefault();
+  const who=document.getElementById('who').value.trim();if(!who)return;
+  last=reading(who);render(last,true);
+});
+applyLang();
+</script>
+</body>
+</html>
